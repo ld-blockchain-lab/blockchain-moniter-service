@@ -9,6 +9,7 @@ const { Task } = Models;
 const addressReg = /^test.+$/;
 
 export default class TestAdaptor extends BaseAdaptor {
+  name = 'test'
   symbol = 'TEST'
   blockchain = 'test'
 

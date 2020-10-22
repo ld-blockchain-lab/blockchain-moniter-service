@@ -1,4 +1,4 @@
-import TestAdaptor from './adaptors/test';
+// import TestAdaptor from './adaptors/test';
 import fetch from '../utils/fetch';
 
 class Hub {
@@ -21,6 +21,13 @@ class Hub {
       },
     });
     Object.defineProperty(this, adaptor.blockchain.toLowerCase(), {
+      configurable: true,
+      enumerable: true,
+      get() {
+        return adaptor;
+      },
+    });
+    Object.defineProperty(this, adaptor.name.toLowerCase(), {
       configurable: true,
       enumerable: true,
       get() {

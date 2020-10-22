@@ -2,6 +2,7 @@ import express from 'express';
 import Wallet from 'ethereumjs-wallet';
 import jsonResponse from '../middlewares/jsonResponse';
 import log from '../utils/log';
+import hub from '../hub';
 
 // const { Models, commonErrorHandler } = require('../db');
 // const varsProvider = require('../middlewares/varsProvider');
@@ -21,6 +22,12 @@ router.get('/t.json', (req, res, next) => {
 router.post('/callback', (req, res, next) => {
   log('【获得hook回报】', req.body);
   next();
+}, jsonResponse);
+
+router.post('/block_native_callback', (req, res) => {
+  hub.BlockNativeEthereum.callback(req.body);
+  res.status(200);
+  res.end('success');
 }, jsonResponse);
 
 export default router;

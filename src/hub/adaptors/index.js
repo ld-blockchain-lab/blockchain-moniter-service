@@ -5,6 +5,7 @@ import { Models } from '../../db';
 const { Task } = Models;
 
 export default class BaseAdaptor extends EventEmitter {
+  name
   symbol
   blockchain
   config
