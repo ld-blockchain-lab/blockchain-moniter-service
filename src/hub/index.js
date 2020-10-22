@@ -28,7 +28,7 @@ class Hub {
         return adaptor;
       },
     });
-    Object.defineProperty(this, adaptor.name.toLowerCase(), {
+    Object.defineProperty(this, adaptor.name, {
       configurable: true,
       enumerable: true,
       get() {
