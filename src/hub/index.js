@@ -1,4 +1,5 @@
 // import TestAdaptor from './adaptors/test';
+import BlockNativeEthereumAdaptor from './adaptors/blockNativeEthereum';
 import fetch from '../utils/fetch';
 
 class Hub {
@@ -40,5 +41,6 @@ class Hub {
 
 const hub = new Hub();
 // hub.addAdaptor(TestAdaptor);
+hub.addAdaptor(BlockNativeEthereumAdaptor);
 
 export default hub;
