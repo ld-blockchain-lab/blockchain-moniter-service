@@ -12,8 +12,7 @@ export default class TestAdaptor extends BaseAdaptor {
   symbol = 'TEST'
   blockchain = 'test'
 
-  constructor(...args) {
-    super(...args);
+  init() {
     // 测试适配器定时塞数据
     setInterval(() => {
       Task.findOne({

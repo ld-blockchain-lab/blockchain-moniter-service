@@ -10,7 +10,8 @@ class Hub {
     fetch.post(task.apikey.webhook, data);
   }
 
-  addAdaptor(adaptor) {
+  addAdaptor(Factory) {
+    const adaptor = new Factory(process.env.ADAPTOR_CONFIG);
     if (!adaptor.symbol) return;
     Object.defineProperty(this, adaptor.symbol.toUpperCase(), {
       configurable: true,
@@ -31,6 +32,6 @@ class Hub {
 }
 
 const hub = new Hub();
-hub.addAdaptor(new TestAdaptor());
+// hub.addAdaptor(TestAdaptor);
 
 export default hub;

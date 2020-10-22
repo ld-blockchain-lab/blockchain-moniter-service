@@ -12,6 +12,7 @@ export default class BaseAdaptor extends EventEmitter {
   constructor(config) {
     super();
     this.config = config;
+    this.init();
   }
 
   createTx(task, txData) {
@@ -28,6 +29,7 @@ export default class BaseAdaptor extends EventEmitter {
   }
 
   // 需要实现的函数
+  init() {}
 
   // 返回地址是否正确
   checkAddress(address) {
@@ -49,3 +51,31 @@ export default class BaseAdaptor extends EventEmitter {
     // 返回promise，bool
   }
 }
+
+const regexes = {
+  BTC: /^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,39}$/,
+  ETH: /^0x[a-fA-F0-9]{40}$/,
+};
+
+class EthereumAdaptor extends BaseAdaptor {
+  symbol = 'ETH'
+  blockchain = 'ethereum'
+
+  checkAddress(address) {
+    return regexes.ETH.test(address.toLowerCase());
+  }
+}
+
+class BitcoinAdaptor extends BaseAdaptor {
+  symbol = 'BTC'
+  blockchain = 'bitcoin'
+
+  checkAddress(address) {
+    return regexes.ETH.test(address.toLowerCase());
+  }
+}
+
+export {
+  EthereumAdaptor,
+  BitcoinAdaptor,
+};
