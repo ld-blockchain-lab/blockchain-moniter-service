@@ -10,6 +10,7 @@
 
 ```json
 {
+  "NODE_ENV": "环境, DEV|PROD",
   "PORT": "服务端口",
   "DB_HOST": "数据库地址",
   "DB_NAME": "数据库名",

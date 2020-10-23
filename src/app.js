@@ -1,4 +1,3 @@
-import createError from 'http-errors';
 import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
@@ -37,19 +36,24 @@ app.use('/api/v1/utils/', utilsRouter);
 app.use('/api/v1/monitor/', monitorRouter);
 
 // catch 404 and forward to error handler
-app.use((req, res, next) => {
-  next(createError(404));
+app.use((req, res) => {
+  res.status(404);
+  res.send('This api does not exist!');
 });
 
 // error handler
 app.use((err, req, res) => {
   // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  // res.locals.message = err.message;
+  // res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
   res.status(err.status || 500);
-  res.send(err.message);
+  if (process.env.NODE_ENV === 'PROD') {
+    res.send('something wrong!');
+  } else {
+    res.send(err.message);
+  }
 });
 
 export default app;
