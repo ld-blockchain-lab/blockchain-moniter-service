@@ -2,10 +2,6 @@
 
 本项目调用`blocknative`进行监控，包装以后进行webhook转发。
 
-## 前提
-
-在`blocknative`注册账户，并添加本项目产生的webhook到`blocknative`中。
-
 ## 配置
 
 ```json
@@ -31,6 +27,12 @@
 各适配器的配置，均加在`ADAPTOR_CONFIG`项中即可。
 
 #### BlockNativeEthereumAdaptor
+
+准备工作：
+1. 实现一个router，用来作为`blocknative`的webhook，将feedback直接推到适配器中，参照`block_native_callback`实现。
+2. 在`blocknative`注册账户，并将第1步中实现的webhook添加到`blocknative`中。
+3. 进行如下配置
+
 BlockNative以太坊配置
 
 ```json
