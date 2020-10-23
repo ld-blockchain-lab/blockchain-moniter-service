@@ -42,15 +42,18 @@ BlockNative以太坊配置
 
 ## API
 
-### 监听一个地址
+### 所有请求
 
-`POST` `/api/v1/alert/new.json`
+所有请求需在`header`中带上`x-api-key`，值为服务的`apikey`。`apikey`的格式为`XXXXXXX-XXXXXXX-XXXXXXX-XXXXXXX`。
+
+### 获得apikey
+
+`POST` `/api/v1/utils/key.json`
 
 Request:
 ```json
 {
-  "address": "0xB6Cb15EF5B6f35a08Fb7374664fB43989d0d5aEf",
-  "type": "tx"
+  "webhook": "http://you/callback"
 }
 ```
 
@@ -58,10 +61,41 @@ Response: 200
 ```json
 {
   "success": true,
+    "data": {
+      "webhook": "http://you/callback",
+      "apikey": "XXXXXXX-XXXXXXX-XXXXXXX-XXXXXXX"
+    }
+}
+```
+
+**`请注意`**：此接口必须有调用限制，可以加参数限制或者必要的User验证。
+
+### 监听一个地址
+
+`POST` `/api/v1/monitor/task.json`
+
+Request:
+```json
+{
+  "address": "TESTaddress",
+  "symbol": "ETH",
+  "blockchain": "ethereum"
+}
+```
+
+其中`symbol`和`blockchain`选择其一即可，主要是为了防止`symbol`重复。
+
+
+Response: 200
+```json
+{
+  "success": true,
   "data": {
-    "address": "0xb6cb15ef5b6f35a08fb7374664fb43989d0d5aef",
+    "address": "0x0000000",
     "type": "tx",
-    "monitored": false
+    "symbol": "ETH",
+    "blockchain": "ethereum",
+    "monitored": true
   }
 }
 ```
@@ -78,87 +112,71 @@ Response: 200
 
 回调数据如下：
 
-ETH转账：
+转账信息：
 
 pending
-```json
+```javascript
 {
-  "address":"0xb6cb15ef5b6f35a08fb7374664fb43989d0d5aef",
-  "system":"ethereum",
-  "network":"goerli",
-  "status":"pending",
-  "hash":"0xee3233a363820d79e6dcfde06995606f1fbaf811950053f719933176f7fd1e6d",
-  "from":"0xf50733d9809a268c717b3a782a2437cfea1006b9",
-  "to":"0xb6cb15ef5b6f35a08fb7374664fb43989d0d5aef",
-  "asset":"ETH",
-  "value":"12400000000000000",
-  "decimals":18,
-  "direction":"incoming",
-  "blockNumber":null
+  task: {
+    address: '0xc85ae8b98a2325e3a7a209a577c15eb9cd583701',
+    type: 'tx',
+    symbol: 'ETH',
+    blockchain: 'ethereum',
+    monitored: true,
+    apikey: {
+      webhook: 'http://webhook',
+      apikey: 'XXXXXXX-XXXXXXX-XXXXXXX-XXXXXXX'
+    }
+  },
+  tx: {
+    address: '0xc85ae8b98a2325e3a7a209a577c15eb9cd583701',
+    blockchain: 'ethereum',
+    network: 'goerli',
+    status: 'pending',
+    hash: '0x22bf0d8347b77f622105581f6deba4a0511f2801bf2b8b5bc8b9429ee90ca1e2',
+    from: '0xb6cb15ef5b6f35a08fb7374664fb43989d0d5aef',
+    to: '0xc85ae8b98a2325e3a7a209a577c15eb9cd583701',
+    blockNumber: null,
+    asset: 'ETH',
+    value: '4000000000000000',
+    decimals: 18,
+    direction: 'incoming'
+  }
 }
 ```
 
 confirmed
-```json
+```javascript
 {
-  "address":"0xb6cb15ef5b6f35a08fb7374664fb43989d0d5aef",
-  "system":"ethereum",
-  "network":"goerli",
-  "status":"confirmed",
-  "hash":"0xee3233a363820d79e6dcfde06995606f1fbaf811950053f719933176f7fd1e6d",
-  "from":"0xf50733d9809a268c717b3a782a2437cfea1006b9",
-  "to":"0xb6cb15ef5b6f35a08fb7374664fb43989d0d5aef",
-  "asset":"ETH",
-  "value":"12400000000000000",
-  "decimals":18,
-  "direction":"incoming",
-  "blockNumber":3166195
+  task: {
+    address: '0xc85ae8b98a2325e3a7a209a577c15eb9cd583701',
+    type: 'tx',
+    symbol: 'ETH',
+    blockchain: 'ethereum',
+    monitored: true,
+    apikey: {
+      webhook: 'http://webhook',
+      apikey: 'XXXXXXX-XXXXXXX-XXXXXXX-XXXXXXX'
+    }
+  },
+  tx: {
+    address: '0xc85ae8b98a2325e3a7a209a577c15eb9cd583701',
+    blockchain: 'ethereum',
+    network: 'goerli',
+    status: 'confirmed',
+    hash: '0x22bf0d8347b77f622105581f6deba4a0511f2801bf2b8b5bc8b9429ee90ca1e2',
+    from: '0xb6cb15ef5b6f35a08fb7374664fb43989d0d5aef',
+    to: '0xc85ae8b98a2325e3a7a209a577c15eb9cd583701',
+    blockNumber: 3623189,
+    asset: 'ETH',
+    value: '4000000000000000',
+    decimals: 18,
+    direction: 'incoming'
+  }
 }
 ```
 
-ERC20转账：
-
-pending
-```json
-{
-  "address":"0xb6cb15ef5b6f35a08fb7374664fb43989d0d5aef",
-  "system":"ethereum",
-  "network":"goerli",
-  "status":"pending",
-  "hash":"0x85c0e95afb535a20603bb8e30bce952ce60475d09e6d18ccdb650523f0b8e60c",
-  "from":"0xf50733d9809a268c717b3a782a2437cfea1006b9",
-  "to":"0xb6cb15ef5b6f35a08fb7374664fb43989d0d5aef",
-  "asset":"RICH",
-  "value":"12345000000000000000000",
-  "decimals":18,
-  "direction":"incoming",
-  "blockNumber":null,
-  "contractAddress":"0x1B605E62C7d6AE9216CBf189A7588fBB9ADD4C2f",
-  "contractType":"erc20"
-}
-```
-
-confirmed
-```json
-{
-  "address":"0xb6cb15ef5b6f35a08fb7374664fb43989d0d5aef",
-  "system":"ethereum",
-  "network":"goerli",
-  "status":"confirmed",
-  "hash":"0x85c0e95afb535a20603bb8e30bce952ce60475d09e6d18ccdb650523f0b8e60c",
-  "from":"0xf50733d9809a268c717b3a782a2437cfea1006b9",
-  "to":"0xb6cb15ef5b6f35a08fb7374664fb43989d0d5aef",
-  "asset":"RICH",
-  "value":"12345000000000000000000",
-  "decimals":18,
-  "direction":"incoming",
-  "blockNumber":3166589,
-  "contractAddress":"0x1B605E62C7d6AE9216CBf189A7588fBB9ADD4C2f",
-  "contractType":"erc20"
-}
-```
-
-其中：
+ERC20等token转账会在`tx`数据中多出`contractAddress`和`contractType`字段。
 
 * 转账数量是`value / 10^decimals`。
 * erc20代币要准确对应`contractAddress`来确保没有同样Symbol的代币混进来。
