@@ -8,20 +8,36 @@
 
 ## 配置
 
+```json
+{
+  "PORT": "服务端口",
+  "DB_HOST": "数据库地址",
+  "DB_NAME": "数据库名",
+  "DB_USER": "数据库用户名",
+  "DB_PASS": "数据库密码",
+  "JWT_SECRET": "忽略",
+  "JWT_ADMIN_SECRET": "忽略",
+  "PAY_TOKEN": "忽略",
+  "DOMAIN": "忽略",
+  // 适配器配置
+  "ADAPTOR_CONFIG": {}
+}
 ```
-PORT=服务端口
-DB_HOST=数据库地址
-DB_NAME=数据库名
-DB_USER=数据库用户名
-DB_PASS=数据库密码
-JWT_SECRET=忽略
-JWT_ADMIN_SECRET=忽略
-PAY_TOKEN=忽略
-DOMAIN=忽略
-BN_KEY=Blocknative的key
-BN_URL=Blocknative监听地址，https://api.blocknative.com/address
-BN_NETWORK=监听的以太坊网络
-WEBHOOK=获得回调后，调用的webhook
+
+### 适配器配置
+各适配器的配置
+
+#### BlockNativeEthereumAdaptor
+BlockNative以太坊配置
+
+```json
+{
+  "ADAPTOR_CONFIG": {
+    "BN_KEY": "BlockNative Apikey",
+    "BN_URL": "https://api.blocknative.com/address",
+    "BN_ETH_NETWORK": "ETH网络"
+  }
+}
 ```
 
 ## API

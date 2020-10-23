@@ -70,8 +70,8 @@ export default class BlockNativeEthereumAdaptor extends EthereumAdaptor {
 
   monitor(address, apikey) {
     if (!this.checkAddress(address)) return Promise.reject(ERROR.MONI_ADDRESS_ERR);
-    const { BN_URL, BN_KEY, BN_NETWORK } = this.config;
-    if (!BN_URL || !BN_KEY || !BN_NETWORK) {
+    const { BN_URL, BN_KEY, BN_ETH_NETWORK } = this.config;
+    if (!BN_URL || !BN_KEY || !BN_ETH_NETWORK) {
       return Promise.reject({
         code: 1000,
         message: 'BlockNativeEthereumAdaptor缺少BN配置参数',
@@ -81,7 +81,7 @@ export default class BlockNativeEthereumAdaptor extends EthereumAdaptor {
       apiKey: BN_KEY,
       address,
       blockchain: 'ethereum',
-      networks: [BN_NETWORK],
+      networks: [BN_ETH_NETWORK],
     }).then((resp) => {
       if (resp.success && resp.data.msg === 'success') {
         return this.createTask({
