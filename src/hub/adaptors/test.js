@@ -22,10 +22,9 @@ export default class TestAdaptor extends BaseAdaptor {
           blockchain: this.blockchain,
         },
         order: [sequelize.fn('RAND')],
-        include: ['apikey'],
       }).then((a) => {
         if (!a) return;
-        this.createTx(a.getData(), {
+        this.createTx({
           address: a.address,
           blockchain: this.blockchain,
           network: 'main',

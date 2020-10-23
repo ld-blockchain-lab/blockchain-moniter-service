@@ -1,14 +1,29 @@
 // import TestAdaptor from './adaptors/test';
 import BlockNativeEthereumAdaptor from './adaptors/blockNativeEthereum';
 import fetch from '../utils/fetch';
+import { Models } from '../db';
+
+const { Task } = Models;
 
 class Hub {
-  createTx = (task, txData) => {
-    const data = {
-      task,
-      tx: txData,
-    };
-    fetch.post(task.apikey.webhook, data);
+  createTx = (adaptor, txData) => {
+    Task.findAll({
+      where: {
+        address: txData.address,
+        symbol: adaptor.symbol,
+        blockchain: adaptor.blockchain,
+      },
+      include: ['apikey'],
+    }).then((tasks) => {
+      tasks.forEach((taskRaw) => {
+        const task = taskRaw.getData();
+        const data = {
+          task,
+          tx: txData,
+        };
+        fetch.post(task.apikey.webhook, data);
+      });
+    });
   }
 
   addAdaptor(Factory) {
@@ -35,7 +50,10 @@ class Hub {
         return adaptor;
       },
     });
-    adaptor.on('create_tx', this.createTx);
+    adaptor.on('create_tx', (txData) => {
+      if (!txData) return;
+      this.createTx(adaptor, txData);
+    });
   }
 }
 
