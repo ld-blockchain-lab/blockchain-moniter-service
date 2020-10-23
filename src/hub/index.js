@@ -27,7 +27,7 @@ class Hub {
   }
 
   addAdaptor(Factory) {
-    const adaptor = new Factory(process.env.ADAPTOR_CONFIG);
+    const adaptor = new Factory(JSON.parse(process.env.ADAPTOR_CONFIG));
     if (!adaptor.symbol) return;
     Object.defineProperty(this, adaptor.symbol.toUpperCase(), {
       configurable: true,

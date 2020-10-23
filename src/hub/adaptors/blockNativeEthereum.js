@@ -1,6 +1,7 @@
 /* eslint-disable prefer-promise-reject-errors */
 import { EthereumAdaptor } from '.';
 import ERROR from '../../const/ERROR.json';
+import fetch from '../../utils/fetch';
 
 function parseEth(feedback) {
   const { watchedAddress, system, network, status, hash, from, to, asset, value, direction, blockNumber } = feedback;
@@ -69,13 +70,33 @@ export default class BlockNativeEthereumAdaptor extends EthereumAdaptor {
 
   monitor(address, apikey) {
     if (!this.checkAddress(address)) return Promise.reject(ERROR.MONI_ADDRESS_ERR);
-    return this.createTask({
-      apikeyId: apikey.id,
-      address: address.toLowerCase(),
-      monitored: true,
-    }).catch((e) => Promise.reject({
-      code: ERROR.COMMON.code,
-      message: e.errors.map((ee) => ee.message).join(';'),
-    }));
+    const { BN_URL, BN_KEY, BN_NETWORK } = this.config;
+    if (!BN_URL || !BN_KEY || !BN_NETWORK) {
+      return Promise.reject({
+        code: 1000,
+        message: 'BlockNativeEthereumAdaptor缺少BN配置参数',
+      });
+    }
+    return fetch.post(BN_URL, {
+      apiKey: BN_KEY,
+      address,
+      blockchain: 'ethereum',
+      networks: [BN_NETWORK],
+    }).then((resp) => {
+      if (resp.success && resp.data.msg === 'success') {
+        return this.createTask({
+          apikeyId: apikey.id,
+          address: address.toLowerCase(),
+          monitored: true,
+        }).catch((e) => Promise.reject({
+          code: ERROR.COMMON.code,
+          message: e.errors.map((ee) => ee.message).join(';'),
+        }));
+      }
+      return Promise.reject({
+        code: 1000,
+        message: 'BlockNative返回失败或请求失败',
+      });
+    });
   }
 }
