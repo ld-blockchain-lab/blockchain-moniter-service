@@ -19,13 +19,15 @@
   "JWT_ADMIN_SECRET": "忽略",
   "PAY_TOKEN": "忽略",
   "DOMAIN": "忽略",
-  // 适配器配置
-  "ADAPTOR_CONFIG": {}
+  "ADAPTOR_CONFIG": {
+    "适配器配置1": "value",
+    "适配器配置2": "value"
+  }
 }
 ```
 
 ### 适配器配置
-各适配器的配置
+各适配器的配置，均加在`ADAPTOR_CONFIG`项中即可。
 
 #### BlockNativeEthereumAdaptor
 BlockNative以太坊配置
