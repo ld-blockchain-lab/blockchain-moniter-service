@@ -16,10 +16,11 @@ class Apikey extends Model {
 
 function model(sequelize) {
   Apikey.init({
-    // 地址
     webhook: {
       type: Sequelize.STRING,
-      allowNull: false,
+    },
+    sms: {
+      type: Sequelize.STRING,
     },
     apikey: {
       type: Sequelize.STRING,
@@ -38,6 +39,13 @@ function model(sequelize) {
         const key = uuidAPIKey.create();
         instance.uuid = key.uuid;
         instance.apikey = key.apiKey;
+      },
+    },
+    validate: {
+      bothCoordsOrNone() {
+        if ((this.webhook === null) && (this.sms === null)) {
+          throw new Error('Sms and Webhook cannot all be null');
+        }
       },
     },
   });
