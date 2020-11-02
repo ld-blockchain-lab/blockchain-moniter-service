@@ -90,6 +90,7 @@ Request:
 
 其中`symbol`和`blockchain`选择其一即可，主要是为了防止`symbol`重复。
 
+如果在参数中加入`"test": true`，将立即返回，并用测试数据出发一次webhook。
 
 Response: 200
 ```json
