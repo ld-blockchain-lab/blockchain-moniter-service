@@ -26,6 +26,22 @@ class Hub {
     });
   }
 
+  createTest = (adaptor, apikey, txData) => {
+    const data = {
+      task: {
+        address: txData.address,
+        type: 'tx',
+        symbol: adaptor.symbol,
+        blockchain: adaptor.blockchain,
+        monitored: true,
+        test: true,
+        apikey: apikey.getData(),
+      },
+      tx: txData,
+    };
+    fetch.post(apikey.webhook, data);
+  }
+
   addAdaptor(Factory) {
     const adaptor = new Factory(JSON.parse(process.env.ADAPTOR_CONFIG));
     if (!adaptor.symbol) return;
@@ -53,6 +69,10 @@ class Hub {
     adaptor.on('create_tx', (txData) => {
       if (!txData) return;
       this.createTx(adaptor, txData);
+    });
+    adaptor.on('create_test', (txData, apikey) => {
+      if (!txData || !apikey) return;
+      this.createTest(adaptor, apikey, txData);
     });
   }
 }
