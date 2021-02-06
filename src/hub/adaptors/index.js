@@ -53,7 +53,7 @@ export default class BaseAdaptor extends EventEmitter {
     // 返回promise，bool
   }
 
-  cancel(address, apikey) {
+  cancelMonitor(address, apikey) {
     throw Error();
     // 返回promise，bool
   }
